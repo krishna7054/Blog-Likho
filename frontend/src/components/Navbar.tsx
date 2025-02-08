@@ -1,15 +1,57 @@
 
-import  { useState } from 'react';
+import  { useEffect, useState } from 'react';
 import {  CiSearch, CiUser, CiLogout } from 'react-icons/ci';
 // import {FaBookOpen} from 'react-icons/fa';
 import {MdOutlineCancel} from 'react-icons/md';
-import { Link } from "react-router-dom"
-import Logo from './logo';
+import { Link, useNavigate } from "react-router-dom"
+import Logo from './Logo';
+// import { useUsers } from '../hooks';
+import { jwtDecode } from 'jwt-decode';
+import { BACKEND_URL } from '../config';
+import axios from 'axios';
 
 const Navbar = () => {
   const [isSearchOpen, setIsSearchOpen] = useState(false);
   const [isProfileOpen, setIsProfileOpen] = useState(false);
-//   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+ 
+
+ const navigate = useNavigate();
+ const [Users, setUsers] = useState<{ name?: string; email?: string } | null>(null);
+
+ useEffect(() => {
+  const token = localStorage.getItem("token");
+  // console.log("t",token)
+  if (token) {
+    const decodedToken: any = jwtDecode(token);
+    const userId = decodedToken.id;
+    try {
+      axios.get(`${BACKEND_URL}/api/v1/user/${userId}`, {
+      headers: {
+        Authorization: token,
+      },
+    })
+    .then((response) => {
+      console.log("res",response.data);
+      
+      setUsers(response.data); // Store as an array
+      // setLoading(false);
+    })
+    } catch (error) {
+      console.error("Invalid token");
+    }
+  }
+}, []);
+ const removeUserToken = () => {
+  localStorage.removeItem('token');
+};
+
+const logout = () => {
+  removeUserToken();
+  navigate('/signin')
+  
+  console.log('User logged out');
+};
+
 
   return (
     <nav className="bg-white shadow-md relative">
@@ -41,6 +83,27 @@ const Navbar = () => {
 
           {/* Right Side Icons and Search */}
           <div className="flex items-center space-x-4">
+          
+<button
+  title="Add New"
+  className="group cursor-pointer outline-none hover:rotate-90 duration-300"
+>
+  <svg
+    xmlns="http://www.w3.org/2000/svg"
+    width="32px"
+    height="32px"
+    viewBox="0 0 24 24"
+    className="stroke-slate-400 fill-none group-hover:fill-slate-800 group-active:stroke-slate-200 group-active:fill-slate-600 group-active:duration-0 duration-300"
+  >
+    <path
+      d="M12 22C17.5 22 22 17.5 22 12C22 6.5 17.5 2 12 2C6.5 2 2 6.5 2 12C2 17.5 6.5 22 12 22Z"
+      stroke-width="1.5"
+    ></path>
+    <path d="M8 12H16" stroke-width="1.5"></path>
+    <path d="M12 16V8" stroke-width="1.5"></path>
+  </svg>
+</button>
+
             {/* Search Bar */}
             <div className="relative">
               <button 
@@ -79,11 +142,18 @@ const Navbar = () => {
 
               {/* Profile Dropdown */}
               {isProfileOpen && (
-                <div className="absolute right-0 mt-2 w-48 bg-white rounded-lg shadow-lg py-2">
+                <div className="absolute right-0 mt-2 w-48 bg-white rounded-lg shadow-lg py-2 z-50">
                   <div className="px-4 py-2 border-b border-gray-100">
-                    <p className="text-sm font-medium text-gray-900">John Doe</p>
-                    <p className="text-sm text-gray-500">john@example.com</p>
+                   
+                  
+                      
+                        <p className="text-sm font-medium text-gray-900">{Users?.name}</p>
+                        <p className="text-sm text-gray-500">{Users?.email}</p>
+                      
+                    
                   </div>
+
+                  
                   <a 
                     href="/profile" 
                     className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
@@ -91,14 +161,14 @@ const Navbar = () => {
                     Your Profile
                   </a>
                   <a 
-                    href="/settings" 
+                    href="#" 
                     className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
                   >
                     Settings
                   </a>
                   <button 
-                    onClick={() => console.log('Logout clicked')}
-                    className="w-full text-left px-4 py-2 text-sm text-red-600 hover:bg-gray-100 flex items-center"
+                    onClick={logout}
+                    className="w-full text-left px-4 py-2 text-sm text-red-600 hover:bg-gray-100 flex items-center cursor-pointer"
                   >
                     <CiLogout className="h-4 w-4 mr-2" />
                     Logout
@@ -106,6 +176,8 @@ const Navbar = () => {
                 </div>
               )}
             </div>
+
+            
 
             {/* Mobile Menu Button */}
             {/* <button 

@@ -1,5 +1,5 @@
 import axios from "axios";
-import { useEffect, useState } from "react"
+import { ReactNode, useEffect, useState } from "react"
 import { BACKEND_URL } from "../config";
 
 export interface Blog{
@@ -77,3 +77,36 @@ export const useBlogs=()=>{
     };
 }
    
+export interface User {
+    [x: string]: ReactNode;
+    name: string;
+    email: string;
+  }
+  
+  export const useUsers = () => {
+    const [Users, setUsers] = useState<User[]>([]);
+    const [loading, setLoading] = useState(true);
+    const [error, setError] = useState<string | null>(null);
+  
+    useEffect(() => {
+      const storedToken = localStorage.getItem("token");
+      const token = storedToken ? JSON.parse(storedToken).jwt : null;
+  
+      axios
+        .get(`${BACKEND_URL}/api/v1/user/me`, {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        })
+        .then((response) => {
+          setUsers([response.data]); // Store user data as an array
+          setLoading(false);
+        })
+        .catch((err) => {
+          console.error("Error fetching user:", err);
+          setError("Failed to load user data");
+          setLoading(false);
+        });
+    }, []);
+    return { Users, loading, error };
+};

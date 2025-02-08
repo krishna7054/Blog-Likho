@@ -1,6 +1,6 @@
 import { ChangeEvent, useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import { SignupType } from "krishna018-common";
+import { SignupType } from "krishna007-common";
 import axios from "axios";
 import { BACKEND_URL } from "../config";
 import Button from "./Button";
