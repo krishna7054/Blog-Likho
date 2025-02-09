@@ -3,7 +3,7 @@ import  { useEffect, useState } from 'react';
 import {  CiSearch, CiUser, CiLogout } from 'react-icons/ci';
 // import {FaBookOpen} from 'react-icons/fa';
 import {MdOutlineCancel} from 'react-icons/md';
-import { Link, useLocation, useNavigate } from "react-router-dom"
+import { Link, useLocation, useNavigate, useSearchParams } from "react-router-dom"
 import Logo from './Logo';
 // import { useUsers } from '../hooks';
 import { jwtDecode } from 'jwt-decode';
@@ -14,11 +14,13 @@ import { Avatar } from './BlogCard';
 const Navbar = ({ onPublish }: { onPublish?: () => void }) => {
   const [isSearchOpen, setIsSearchOpen] = useState(false);
   const [isProfileOpen, setIsProfileOpen] = useState(false);
+  const [Users, setUsers] = useState<{ name?: string; email?: string } | null>(null);
+  const [searchTerm, setSearchTerm] = useState('');
+  const [searchParams, setSearchParams] = useSearchParams();
  
 
  const navigate = useNavigate();
  const location = useLocation(); 
- const [Users, setUsers] = useState<{ name?: string; email?: string } | null>(null);
 
  useEffect(() => {
   const token = localStorage.getItem("token");
@@ -52,6 +54,11 @@ const logout = () => {
   navigate('/signin')
   
   console.log('User logged out');
+};
+
+const handleSearch = (e: React.ChangeEvent<HTMLInputElement>) => {
+  setSearchTerm(e.target.value);
+  setSearchParams({ search: e.target.value });
 };
 
 
@@ -109,13 +116,36 @@ const logout = () => {
 
 
 {location.pathname === "/publish" ? ( // Check if on the /publish page
-              <button
-                title="Publish"
-                onClick={onPublish} 
-                className="px-4 py-2 text-white bg-blue-700 rounded-lg hover:bg-blue-800"
-              >
-                Publish
-              </button>
+
+/* From Uiverse.io by Itskrish01 */ 
+<button
+title="Publish"
+onClick={onPublish} 
+  className="relative flex items-center px-3 py-2 overflow-hidden font-medium transition-all bg-indigo-500 rounded-md group"
+>
+  <span
+    className="absolute top-0 right-0 inline-block w-4 h-4 transition-all duration-500 ease-in-out bg-indigo-700 rounded group-hover:-mr-4 group-hover:-mt-4"
+  >
+    <span
+      className="absolute top-0 right-0 w-5 h-5 rotate-45 translate-x-1/2 -translate-y-1/2 bg-white"
+    ></span>
+  </span>
+  <span
+    className="absolute bottom-0 rotate-180 left-0 inline-block w-4 h-4 transition-all duration-500 ease-in-out bg-indigo-700 rounded group-hover:-ml-4 group-hover:-mb-4"
+  >
+    <span
+      className="absolute top-0 right-0 w-5 h-5 rotate-45 translate-x-1/2 -translate-y-1/2 bg-white"
+    ></span>
+  </span>
+  <span
+    className="absolute bottom-0 left-0 w-full h-full transition-all duration-500 ease-in-out delay-200 -translate-x-full bg-indigo-600 rounded-md group-hover:translate-x-0"
+  ></span>
+  <span
+    className="relative w-full text-left text-white transition-colors duration-200 ease-in-out group-hover:text-white"
+    >Publish</span>
+</button>
+
+             
             ) : (
               <Link to={`/publish`}>
                 <button
@@ -153,6 +183,8 @@ const logout = () => {
                     <CiSearch className="h-4 w-4 text-gray-400 ml-2" />
                     <input
                       type="text"
+                      value={searchTerm} 
+                      onChange={handleSearch} 
                       placeholder="Search articles..."
                       className="w-full py-2 px-3 text-gray-700 focus:outline-none"
                       autoFocus
@@ -194,12 +226,13 @@ const logout = () => {
                   >
                     Your Profile
                   </a>
-                  <a 
+                  
+                  {/* <a 
                     href="#" 
                     className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
                   >
                     Settings
-                  </a>
+                  </a> */}
                   <button 
                     onClick={logout}
                     className="w-full text-left px-4 py-2 text-sm text-red-600 hover:bg-gray-100 flex items-center cursor-pointer"

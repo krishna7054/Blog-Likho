@@ -1,23 +1,59 @@
 import { useState, useEffect, useRef, useMemo, ChangeEvent } from 'react';
 import { CKEditor, useCKEditorCloud } from '@ckeditor/ckeditor5-react';
-
+import { GoogleGenerativeAI } from "@google/generative-ai";
+import axios from 'axios';
 import '../App.css';
 
 const LICENSE_KEY =
 	'eyJhbGciOiJFUzI1NiJ9.eyJleHAiOjE3NDAzNTUxOTksImp0aSI6IjJhZjMxZDM2LTM5OGYtNGNkYy1hOGI3LTc5OWI4MGYxNzY0OCIsInVzYWdlRW5kcG9pbnQiOiJodHRwczovL3Byb3h5LWV2ZW50LmNrZWRpdG9yLmNvbSIsImRpc3RyaWJ1dGlvbkNoYW5uZWwiOlsiY2xvdWQiLCJkcnVwYWwiLCJzaCJdLCJ3aGl0ZUxhYmVsIjp0cnVlLCJsaWNlbnNlVHlwZSI6InRyaWFsIiwiZmVhdHVyZXMiOlsiKiJdLCJ2YyI6Ijg5ZmQ0ODhiIn0.eelj7hqXJbmFfQtWHoP46WwUd2lctOEizNQ7YdgZt_4s4ua7NgKwTb68qah9jwCr-RZKlP1JFHmlNkLzEZpOSA';
-
+    const GEMINI_API_KEY = "AIzaSyBabhB-oEErVs9H_O0ulKt3tFU36Bs5im0";
 export default function TextEditor({ onChange }: {onChange: (e: ChangeEvent<HTMLTextAreaElement>) => void}) {
 	const editorContainerRef = useRef(null);
 	const editorRef = useRef(null);
 	const editorWordCountRef = useRef(null);
 	const [isLayoutReady, setIsLayoutReady] = useState(false);
 	const cloud = useCKEditorCloud({ version: '44.1.0' });
+    const [suggestions, setSuggestions] = useState<string | null>(null);
+    const [selectedText, setSelectedText] = useState<string | null>(null);
+
+    const fun=async(text:string)=>{
+        const genAI = new GoogleGenerativeAI(GEMINI_API_KEY);
+        const model = genAI.getGenerativeModel({ model: "gemini-1.5-flash" });
+        const prompt = `Describe user input  to enhance the user sentence keep big and precise give me only plane text no other user_input :${text}`
+        const result = await model.generateContent(prompt);
+        console.log(result.response.text());
+        setSuggestions(result.response.text())
+        return result.response.text()
+    }
 
 	useEffect(() => {
 		setIsLayoutReady(true);
 
 		return () => setIsLayoutReady(false);
 	}, []);
+
+
+    // const fetchContentSuggestion = async (text: string) => {
+    //     try {
+    //         console.log("text",text);
+            
+    //         const response = await axios.post(
+    //             `https://generativelanguage.googleapis.com/v1/models/gemini-pro:generateText?key=${GEMINI_API_KEY}`,
+    //             { prompt: `Describe in detail: "${text}"` }
+    //         );
+    //         console.log("respo",response.data?.candidates?.[0]?.output);
+            
+    //         setSuggestions(response.data?.candidates?.[0]?.output || "No suggestions available.");
+    //     } catch (error) {
+    //         console.error("Error fetching suggestions:", error);
+    //         setSuggestions("Failed to fetch suggestions.");
+    //     }
+    // };
+
+    const handleSelection = () => {
+        const selection = window.getSelection()?.toString();
+        setSelectedText(selection && selection.trim() ? selection : null);
+    };
 
 	const { BalloonEditor, editorConfig } = useMemo(() => {
 		if (cloud.status !== 'success' || !isLayoutReady) {
@@ -98,6 +134,7 @@ export default function TextEditor({ onChange }: {onChange: (e: ChangeEvent<HTML
 				],
 				balloonToolbar: ['bold', 'italic', '|', 'bulletedList', 'numberedList'],
 				blockToolbar: ['fontColor', '|', 'bold', 'italic', '|', 'bulletedList', 'numberedList'],
+               
 				heading: {
 					options: [
 						{
@@ -162,12 +199,12 @@ export default function TextEditor({ onChange }: {onChange: (e: ChangeEvent<HTML
 	}, [cloud, isLayoutReady]);
 
 	return (
-		<div className="main-container">
+		<div className="main-container mt-10">
 			<div
 				className=" editor-container editor-container_balloon-editor editor-container_include-block-toolbar editor-container_include-word-count"
 				ref={editorContainerRef}
 			>
-				<div className="editor-container__editor text-3xl  ">
+				<div className="editor-container__editor text-3xl" onMouseUp={handleSelection}>
 					<div ref={editorRef} >
 						{BalloonEditor && editorConfig && (
 							<CKEditor
@@ -193,8 +230,23 @@ export default function TextEditor({ onChange }: {onChange: (e: ChangeEvent<HTML
 						)}
 					</div>
 				</div>
+                {selectedText && (
+                    <button 
+                        className="mt-4 px-4 py-2 bg-blue-500 text-white rounded-md" 
+                        onClick={() => fun(selectedText)}
+                    >
+                        Generate with AI
+                    </button>
+                )}
+                {suggestions && (
+                    <div className="p-4 mt-4 border border-gray-300 rounded-md">
+                        <h3 className="font-bold text-lg">AI Suggestions:</h3>
+                        <p className="text-gray-700">{suggestions}</p>
+                    </div>
+                )}
 				<div className="editor_container__word-count" ref={editorWordCountRef}></div>
 			</div>
+          
 		</div>
 	);
 }

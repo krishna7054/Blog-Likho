@@ -48,9 +48,9 @@ blogRouter.post('/',async (c)=>{
 	}
 	const post = await prisma.post.create({
 		data: {
-			title: body.title,
 			content: body.content,
-			authorId: userId
+			authorId: userId,
+			publishedDate:new Date()
 		}
 	});
 	return c.json({
@@ -78,8 +78,9 @@ blogRouter.put('/',async (c)=>{
 			authorId: userId
 		},
 		data: {
-			title: body.title,
+			
 			content: body.content
+			
 		}
 	});
 
@@ -94,7 +95,7 @@ blogRouter.get('/bulk',async (c)=>{
 	const posts = await prisma.post.findMany({
 		select:{
 			content:true,
-			title:true,
+			publishedDate:true,
 			id:true,
 			author:{
 				select:{
@@ -119,8 +120,8 @@ blogRouter.get('/:id',async (c)=>{
 		},
 		select:{
 			id:true,
-			title:true,
 			content:true,
+			publishedDate:true,
 			author:{
 				select:{
 					name:true
