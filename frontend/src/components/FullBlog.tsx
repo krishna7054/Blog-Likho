@@ -26,9 +26,13 @@ export const FullBlog=({blog}:{blog:Blog})=>{
                 <div className="text-slate-500 pt-2">
                     Post on 2nd December 2023
                 </div>
-                <div className="pt-4">
+                {/* <div className="pt-4">
                     {blog.content}
-                </div>
+                </div> */}
+                  <div
+        className="pt-4"
+        dangerouslySetInnerHTML={{ __html: blog.content }}
+      />
             </div>
             <div className="col-span-4">
                 <div className="text-slate-600 text-lg">
@@ -36,7 +40,7 @@ export const FullBlog=({blog}:{blog:Blog})=>{
                 </div>
                 <div className="flex w-full">
                     <div className="pr-4 flex flex-col justify-center">
-                        <Avatar size="big" name={blog.author.name || "Anonymous"} />
+                        <Avatar  name={blog.author.name || "Anonymous"} />
                     </div>
                     <div>
                         <div className="text-xl font-bold">

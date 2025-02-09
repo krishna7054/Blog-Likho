@@ -3,19 +3,21 @@ import  { useEffect, useState } from 'react';
 import {  CiSearch, CiUser, CiLogout } from 'react-icons/ci';
 // import {FaBookOpen} from 'react-icons/fa';
 import {MdOutlineCancel} from 'react-icons/md';
-import { Link, useNavigate } from "react-router-dom"
+import { Link, useLocation, useNavigate } from "react-router-dom"
 import Logo from './Logo';
 // import { useUsers } from '../hooks';
 import { jwtDecode } from 'jwt-decode';
 import { BACKEND_URL } from '../config';
 import axios from 'axios';
+import { Avatar } from './BlogCard';
 
-const Navbar = () => {
+const Navbar = ({ onPublish }: { onPublish?: () => void }) => {
   const [isSearchOpen, setIsSearchOpen] = useState(false);
   const [isProfileOpen, setIsProfileOpen] = useState(false);
  
 
  const navigate = useNavigate();
+ const location = useLocation(); 
  const [Users, setUsers] = useState<{ name?: string; email?: string } | null>(null);
 
  useEffect(() => {
@@ -54,7 +56,7 @@ const logout = () => {
 
 
   return (
-    <nav className="bg-white shadow-md relative">
+    <nav className="bg-white shadow-md fixed z-10 w-full ">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex justify-between items-center h-16">
           {/* Logo and Brand */}
@@ -83,7 +85,7 @@ const logout = () => {
 
           {/* Right Side Icons and Search */}
           <div className="flex items-center space-x-4">
-          
+          {/* <Link to={`/publish`}>  
 <button
   title="Add New"
   className="group cursor-pointer outline-none hover:rotate-90 duration-300"
@@ -103,6 +105,37 @@ const logout = () => {
     <path d="M12 16V8" stroke-width="1.5"></path>
   </svg>
 </button>
+</Link>  */}
+
+
+{location.pathname === "/publish" ? ( // Check if on the /publish page
+              <button
+                title="Publish"
+                onClick={onPublish} 
+                className="px-4 py-2 text-white bg-blue-700 rounded-lg hover:bg-blue-800"
+              >
+                Publish
+              </button>
+            ) : (
+              <Link to={`/publish`}>
+                <button
+                  title="Add New"
+                  className="group cursor-pointer outline-none hover:rotate-90 duration-300"
+                >
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    width="32px"
+                    height="32px"
+                    viewBox="0 0 24 24"
+                    className="stroke-slate-400 fill-none group-hover:fill-slate-800 group-active:stroke-slate-200 group-active:fill-slate-600 group-active:duration-0 duration-300"
+                  >
+                    <path d="M12 22C17.5 22 22 17.5 22 12C22 6.5 17.5 2 12 2C6.5 2 2 6.5 2 12C2 17.5 6.5 22 12 22Z" strokeWidth="1.5"></path>
+                    <path d="M8 12H16" strokeWidth="1.5"></path>
+                    <path d="M12 16V8" strokeWidth="1.5"></path>
+                  </svg>
+                </button>
+              </Link>
+            )}
 
             {/* Search Bar */}
             <div className="relative">
@@ -136,7 +169,8 @@ const logout = () => {
                 className="flex items-center space-x-2 p-2 text-gray-600 hover:text-indigo-600 transition-colors"
               >
                 <div className="w-8 h-8 rounded-full bg-indigo-100 flex items-center justify-center">
-                  <CiUser className="h-5 w-5" />
+                  {/* <CiUser className="h-5 w-5" /> */}
+                   <Avatar name={Users?.name || 'Null'} />
                 </div>
               </button>
 
