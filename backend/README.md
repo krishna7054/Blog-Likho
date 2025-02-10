@@ -17,6 +17,19 @@ This project is a blogging platform that allows users to read and publish blog p
 - **AI Integration**: 
   - Google Generative AI for generating summaries of blog posts.
 
+## Features
+- User authentication for signing up and signing in.
+- Ability to create, read, update, and delete blog posts.
+- AI-generated summaries for blog content.
+- Rich text editing capabilities using CKEditor.
+- Responsive design for a better user experience.
+
+## Future Improvements
+- Implement user roles and permissions for enhanced security.
+- Add a comment section for each blog post.
+- Integrate social media sharing options.
+- Improve the UI/UX with additional styling and animations.
+
 ## Table of Contents
 - [Installation](#installation)
 - [Usage](#usage)
@@ -27,12 +40,7 @@ This project is a blogging platform that allows users to read and publish blog p
 - [Database Setup](#database-setup)
 - [Using Prisma and Accelerator](#using-prisma-and-accelerator)
 - [CKEditor Integration](#ckeditor-integration)
-- [Wrangler Configuration](#wrangler-configuration)
-- [Why Use Wrangler](#why-use-wrangler)
-- [API Documentation](#api-documentation)
-- [Contributing](#contributing)
-- [License](#license)
-- [Contact Information](#contact-information)
+- [Wrangler](#why-use-wrangler)
 
 ## Installation
 To install the necessary dependencies, run:
@@ -57,7 +65,7 @@ The project utilizes the Google Generative AI library to generate summaries for 
 The backend uses the Hono framework to create a lightweight web server. It sets up routes for user and blog functionalities and enables CORS for all routes.
 
 ## Common Folder Module
-The `common` folder contains shared modules used across the project, including Zod schemas for validating user input during signup, signin, and post creation/updating. The `krishna007-common` module provides reusable components and utilities that can be leveraged throughout the application.
+The `common` folder contains shared modules used across the project, including Zod schemas for validating user input during signup, signin, and post creation/updating.
 
 ## Zod for Validation
 Zod is used for input validation in the project. It defines schemas for:
@@ -80,28 +88,10 @@ Prisma is used for database interactions, and the schema defines the structure o
 ## CKEditor Integration
 The project uses **CKEditor** for rich text editing capabilities, allowing users to create and format content for blog posts. The editor is configured with a toolbar that includes options for headings, font color, bold, italic, and lists. It also supports features like word count and mentions. Additionally, users can generate content suggestions using the Google Generative AI model by selecting text and clicking a button to enhance their input.
 
-## Wrangler Configuration
-The project uses **Wrangler** for deployment and configuration. The `wrangler.toml` file includes:
-- **Name**: The project is named "backend".
-- **Compatibility Date**: Set to "2023-12-01".
-- **Variables**:
-  - **DATABASE_URL**: Connection string for the database used by Prisma.
-  - **JWT_SECRET**: Secret key for JSON Web Token (JWT) authentication.
 
-## Why Use Wrangler
+## Wrangler
 **Wrangler** is a command-line tool that simplifies the deployment and management of serverless applications. It provides several benefits:
 - **Easy Configuration**: Wrangler allows you to define your project settings, environment variables, and deployment configurations in a single file (`wrangler.toml`).
 - **Streamlined Deployment**: It simplifies the process of deploying your application to serverless platforms, making it easier to manage updates and changes.
 - **Integration with Cloudflare Workers**: If your project uses Cloudflare Workers, Wrangler provides seamless integration, allowing you to leverage the benefits of edge computing.
 
-## API Documentation
-Details about the API endpoints (if applicable).
-
-## Contributing
-Guidelines for contributing to the project.
-
-## License
-Information about the project's license.
-
-## Contact Information
-How to reach the project maintainers.
