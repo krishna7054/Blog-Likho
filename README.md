@@ -1,4 +1,4 @@
-# Project Title
+# Blog Likho
 
 ## Description
 This project is a blogging platform that allows users to read and publish blog posts. It features an AI-powered summary generation for blog content using Gemini AI, enhancing user experience by providing quick insights into the articles.
