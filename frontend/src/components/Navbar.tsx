@@ -202,7 +202,7 @@ onClick={onPublish}
               >
                 <div className="w-8 h-8 rounded-full bg-indigo-100 flex items-center justify-center">
                   {/* <CiUser className="h-5 w-5" /> */}
-                   <Avatar name={Users?.name || 'Null'} />
+                   <Avatar name={Users?.name || 'Null'} size={"small"} />
                 </div>
               </button>
 

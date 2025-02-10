@@ -64,6 +64,8 @@ export const Publish =()=>{
                 </button> */}
             </div>
         </div>
+        <footer className="flex justify-center mt-96">Select Your Text and Edit and Generate your Text  </footer>
+        
     </div>
 }
 

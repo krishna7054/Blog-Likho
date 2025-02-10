@@ -56,7 +56,7 @@ export const BlogCard = ({ id, authorName, content, publishedDate }: BlogCardPro
       <div className="p-4 border-b border-slate-200 pb-4 w-screen max-w-screen-md cursor-pointer">
         <div className="flex">
           <div className="bg-yellow-400 border rounded-full w-7 h-7 flex justify-center">
-            <Avatar name={authorName} />
+            <Avatar name={authorName} size={"small"}/>
           </div>
           <div className="font-extrathin pl-2 text-md flex justify-center flex-col">
             {authorName.toUpperCase()}
@@ -92,10 +92,10 @@ export const BlogCard = ({ id, authorName, content, publishedDate }: BlogCardPro
 };
 
 // Avatar component
-export function Avatar({ name }: { name: string }) {
+export function Avatar({ name, size="small" }: { name: string, size:"small" | "big" }) {
   return (
-    <div className="relative inline-flex items-center justify-center overflow-hidden">
-      <span className="font-bold text-lg text-gray-600 dark:text-gray-800">
+    <div className="relative inline-flex items-center justify-center overflow-hidden ">
+      <span className={`font-bold  text-gray-600 dark:text-gray-800 ${size === "small" ? "text-lg":"text-8xl"}`}>
         {name[0].toUpperCase()}
       </span>
     </div>

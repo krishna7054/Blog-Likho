@@ -77,7 +77,7 @@ export const FullBlog=({blog}:{blog:Blog})=>{
                 
                 <div className="  flex flex-col ">
                         <div className="bg-amber-400 rounded-full w-10 h-10 justify-center flex">
-                        <Avatar  name={blog.author.name || "Anonymous"} />
+                        <Avatar  name={blog.author.name || "Anonymous"} size={"small"} />
                         </div>
                         
                     </div>
