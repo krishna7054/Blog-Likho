@@ -79,11 +79,7 @@ Zod is used for input validation in the project. It defines schemas for:
 
 ## Database Setup
 The project uses **PostgreSQL** as the database. The connection string is defined in the `.env` file, which Prisma uses to connect to the database. The connection string includes:
-- **Username**: `neondb_owner`
-- **Password**: `npg_8VEZM0THBelI`
-- **Host**: `ep-wandering-grass-a4g8xzs6-pooler.us-east-1.aws.neon.tech`
-- **Database Name**: `neondb`
-- **SSL Mode**: `require` (indicating that SSL is required for the connection).
+- **DATABASE_URL**: `DATABASE_URL`
 
 ## Using Prisma and Accelerator
 Prisma is used for database interactions, and the schema defines the structure of the database with models for users and posts. The project also utilizes **Prisma Accelerate** to speed up queries and scale easily with serverless or edge functions, optimizing performance for applications that require quick responses.
