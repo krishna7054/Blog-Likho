@@ -43,6 +43,12 @@ This project is a blogging platform that allows users to read and publish blog p
 - [Wrangler](#why-use-wrangler)
 
 ## Installation
+
+To deploy the application, use:
+```bash
+cd frontend
+```
+
 To install the necessary dependencies, run:
 ```bash
 npm install
@@ -53,10 +59,7 @@ To run the development server, use:
 ```bash
 npm run dev
 ```
-To deploy the application, use:
-```bash
-npm run deploy
-```
+
 
 ## Gemini AI Integration
 The project utilizes the Google Generative AI library to generate summaries for blog posts. The `BlogCard` component fetches a summary by sending the blog content to the AI model, which returns a concise summary for display.
