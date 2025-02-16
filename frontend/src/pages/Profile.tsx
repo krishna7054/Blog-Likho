@@ -12,10 +12,10 @@ import { Spinner } from "../components/Spinner";
 import { toast } from "react-toastify";
 
 function Profile() {
-  const [isEditing, setIsEditing] = useState(false);
+  const [isEditing] = useState(false);
   const [Users, setUsers] = useState<{ name?: string; email?: string; id?: string } | null>(null);
   const [userBlogs, setUserBlogs] = useState<Blog[]>([]);
-  const { loading, blogs } = useBlogs();
+  const { blogs } = useBlogs();
   const navigate = useNavigate();
 
 
@@ -40,7 +40,7 @@ function Profile() {
         .then((response) => {
           setUsers(response.data);
         })
-        .catch((error) => console.error("Invalid token"));
+        .catch(() => console.error("Invalid token"));
     }
   }, []);
 

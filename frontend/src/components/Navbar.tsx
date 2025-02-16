@@ -15,7 +15,7 @@ const Navbar = ({ onPublish }: { onPublish?: () => void }) => {
   const [isProfileOpen, setIsProfileOpen] = useState(false);
   const [Users, setUsers] = useState<{ name?: string; email?: string } | null>(null);
   const [searchTerm, setSearchTerm] = useState('');
-  const [searchParams, setSearchParams] = useSearchParams();
+  const [, setSearchParams] = useSearchParams();
  
 
  const navigate = useNavigate();

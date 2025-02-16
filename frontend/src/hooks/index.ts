@@ -96,10 +96,9 @@ export interface User {
           setUsers([response.data]); // Store user data as an array
           setLoading(false);
         })
-        .catch((err) => {
-          
-          setError("Failed to load user data");
-          setLoading(false);
+        .catch(error => {
+            setError(error);
+            setLoading(false);
         });
     }, []);
     return { Users, loading, error };

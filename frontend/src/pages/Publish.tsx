@@ -9,7 +9,7 @@ import { toast } from "react-toastify";
 export const Publish =()=>{
     const location = useLocation();
     const blogData = location.state?.blog || null;
-    const [title, setTitle] = useState(blogData?.title || "");
+    const [title] = useState(blogData?.title || "");
     const [description, setDescription] = useState(blogData?.content || "");
     const navigate = useNavigate();
 

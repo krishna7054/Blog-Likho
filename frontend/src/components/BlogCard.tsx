@@ -1,7 +1,6 @@
 import { Link } from "react-router-dom";
 import { useEffect, useState } from "react";
 import { GoogleGenerativeAI } from "@google/generative-ai";
-import { toast } from "react-toastify";
 
 const GEMINI_API_KEY = "AIzaSyBabhB-oEErVs9H_O0ulKt3tFU36Bs5im0"; 
 
