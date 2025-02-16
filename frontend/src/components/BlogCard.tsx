@@ -13,7 +13,8 @@ interface BlogCardProps {
 }
 
 export const BlogCard = ({ id, authorName, content, publishedDate }: BlogCardProps) => {
-  const [summary, setSummary] = useState<string>("Generating summary...");
+  const [summary, setSummary] = useState<string>("Wait a second ...");
+  const [tag, setTag] = useState<string>("N/A");
 
   const formatDate = (dateString: string | number | Date) => {
     return new Date(dateString).toLocaleDateString("en-GB"); // dd/mm/yyyy
@@ -39,11 +40,12 @@ export const BlogCard = ({ id, authorName, content, publishedDate }: BlogCardPro
     const fetchSummary = async () => {
       try {
         const gemini = new GoogleGenerativeAI(GEMINI_API_KEY);
-        const model = gemini.getGenerativeModel({ model: "gemini-pro" });
-        const response = await model.generateContent(`Summarize this blog post in 2 sentences: ${filteredContent}`);
+        const model = gemini.getGenerativeModel({ model: "gemini-1.5-flash" });
+        const response = await model.generateContent(`Summarize the following blog post in two concise sentences:\n\n${filteredContent}`);
+        const response2 = await model.generateContent(`Provide a single, relevant tag that best represents the main topic of the following blog post:\n\n${filteredContent}\n\nOnly return the tag without any additional text.`);
         setSummary(response.response.text());
+        setTag(response2.response.text());
       } catch (error) {
-        console.error("Error generating summary:", error);
         setSummary("Failed to generate summary.");
       }
     };
@@ -66,6 +68,12 @@ export const BlogCard = ({ id, authorName, content, publishedDate }: BlogCardPro
           </div>
           <div className="pl-2 font-thin text-md text-slate-600 flex justify-center flex-col">
             {formatDate(publishedDate)}
+          </div>
+          <div className="flex justify-center flex-col pl-2">
+            <Circle />
+          </div>
+          <div className="p-1 ml-1 font-semibold text-md text-cyan-700 text-slate-600 flex justify-center flex-col border border-yellow-500  ">
+            {tag}
           </div>
         </div>
 

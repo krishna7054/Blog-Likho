@@ -7,7 +7,13 @@ import '../App.css';
 const LICENSE_KEY =
 	'eyJhbGciOiJFUzI1NiJ9.eyJleHAiOjE3NDAzNTUxOTksImp0aSI6IjJhZjMxZDM2LTM5OGYtNGNkYy1hOGI3LTc5OWI4MGYxNzY0OCIsInVzYWdlRW5kcG9pbnQiOiJodHRwczovL3Byb3h5LWV2ZW50LmNrZWRpdG9yLmNvbSIsImRpc3RyaWJ1dGlvbkNoYW5uZWwiOlsiY2xvdWQiLCJkcnVwYWwiLCJzaCJdLCJ3aGl0ZUxhYmVsIjp0cnVlLCJsaWNlbnNlVHlwZSI6InRyaWFsIiwiZmVhdHVyZXMiOlsiKiJdLCJ2YyI6Ijg5ZmQ0ODhiIn0.eelj7hqXJbmFfQtWHoP46WwUd2lctOEizNQ7YdgZt_4s4ua7NgKwTb68qah9jwCr-RZKlP1JFHmlNkLzEZpOSA';
     const GEMINI_API_KEY = "AIzaSyBabhB-oEErVs9H_O0ulKt3tFU36Bs5im0";
-export default function TextEditor({ onChange }: {onChange: (e: ChangeEvent<HTMLTextAreaElement>) => void}) {
+export default function TextEditor({ 
+    initialContent, // Pass initial content from parent
+    onChange 
+}: { 
+    initialContent: string;
+    onChange: (content: string) => void 
+}) {
 	const editorContainerRef = useRef(null);
 	const editorRef = useRef(null);
 	const editorWordCountRef = useRef(null);
@@ -19,7 +25,7 @@ export default function TextEditor({ onChange }: {onChange: (e: ChangeEvent<HTML
     const fun=async(text:string)=>{
         const genAI = new GoogleGenerativeAI(GEMINI_API_KEY);
         const model = genAI.getGenerativeModel({ model: "gemini-1.5-flash" });
-        const prompt = `Describe user input  to enhance the user sentence keep big and precise give me only plane text no other user_input :${text}`
+        const prompt = `Enhance the following user input while keeping it concise and impactful. Provide only plain text, no additional comments. ${text}`;
         const result = await model.generateContent(prompt);
         console.log(result.response.text());
         setSuggestions(result.response.text())
@@ -193,10 +199,10 @@ export default function TextEditor({ onChange }: {onChange: (e: ChangeEvent<HTML
 						}
 					]
 				},
-				placeholder: 'Type or paste your content here!'
+				initialData: initialContent || "",
 			}
 		};
-	}, [cloud, isLayoutReady]);
+	}, [cloud, isLayoutReady,initialContent]);
 
 	return (
 		<div className="main-container  pt-20">

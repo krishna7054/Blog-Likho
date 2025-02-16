@@ -1,5 +1,5 @@
 import { jwtDecode } from "jwt-decode";
-import React, { useEffect, useState } from "react";
+import  { useEffect, useState } from "react";
 import { LuCamera, LuMail } from "react-icons/lu";
 import { BACKEND_URL } from "../config";
 import axios from "axios";
@@ -7,17 +7,28 @@ import { Avatar } from "../components/BlogCard";
 import DOMPurify from "dompurify";
 import Navbar from "../components/Navbar";
 import { Blog, useBlogs } from "../hooks";
+import TextEditor from "../components/TextEditor";
+import { useNavigate } from "react-router-dom";
+import { div } from "motion/react-client";
+import { Spinner } from "../components/Spinner";
 
 function Profile() {
   const [isEditing, setIsEditing] = useState(false);
   const [Users, setUsers] = useState<{ name?: string; email?: string; id?: string } | null>(null);
   const [userBlogs, setUserBlogs] = useState<Blog[]>([]);
+  const [editingBlog, setEditingBlog] = useState<Blog | null>(null);
   const { loading, blogs } = useBlogs();
+  const [blogContent, setBlogContent] = useState("");
+  const [showModal, setShowModal] = useState(false);
+  const navigate = useNavigate();
+
 
 
   const formatDate = (dateString: string | number | Date) => {
     return new Date(dateString).toLocaleDateString("en-GB"); // dd/mm/yyyy
   };
+
+
 
   // Fetch User Details
   useEffect(() => {
@@ -25,7 +36,7 @@ function Profile() {
     if (token) {
       const decodedToken: any = jwtDecode(token);
       const userId = decodedToken.id;
-
+      
       axios
         .get(`${BACKEND_URL}/api/v1/user/${userId}`, {
           headers: { Authorization: `Bearer ${token}` },
@@ -57,6 +68,69 @@ function Profile() {
 
     return { title, content: doc.body.innerHTML };
   };
+
+    // Delete Blog Post
+    const handleDelete = async (blogId: string) => {
+
+      const storedToken = localStorage.getItem("token");
+      const token = storedToken ? JSON.parse(storedToken).jwt : null;
+      
+      if (!token) {
+        console.error("User is not authenticated");
+        return;
+      }
+    
+      try {
+        await axios.delete(`${BACKEND_URL}/api/v1/blog/${blogId}`, {
+          headers: { Authorization: token},
+          withCredentials: true,
+        });
+    
+        // Remove the deleted blog from the UI
+        setUserBlogs(userBlogs.filter((blog) => blog.id !== blogId));
+    
+        console.log("Post deleted successfully");
+      } catch (error) {
+        console.error("Failed to delete post:", error);
+      }
+    };
+
+    const handleEdit = (blog: Blog) => {
+      navigate("/publish", { state: { blog } });
+    };
+
+    // const handleSave = async () => {
+    //   const storedToken = localStorage.getItem("token");
+    //   const token = storedToken ? JSON.parse(storedToken).jwt : null;
+    //   if (!token) {
+    //     console.error("User is not authenticated");
+    //     return;
+    //   }
+  
+    //   try {
+    //     if (editingBlog) {
+    //       console.log(`${BACKEND_URL}/api/v1/blog/${editingBlog?.id}`);
+
+    //       await axios.put(`${BACKEND_URL}/api/v1/blog/${editingBlog.id}`, 
+    //         { content: blogContent },
+    //         { headers: { Authorization: token } }
+    //       );
+    //     }
+
+    //     setUserBlogs((prevBlogs) =>
+    //       prevBlogs.map((blog) =>
+    //         // @ts-ignore
+    //         blog.id === editingBlog.id ? { ...blog, content: blogContent } : blog
+    //       )
+    //     );
+  
+    //     setShowModal(false);
+    //     setEditingBlog(null);
+    //   } catch (error) {
+    //     console.error("Failed to save post:", error);
+    //   }
+    // };
+    
 
   return (
     <div>
@@ -101,7 +175,8 @@ function Profile() {
                 </div>
                 <div className="space-y-6">
                   {userBlogs.length === 0 ? (
-                    <p className="text-gray-600">You haven't written any blogs yet.</p>
+                    <Spinner/>
+                    // <p className="text-gray-600">You haven't written any blogs yet.</p>
                   ) : (
                     userBlogs.map((blog) => {
                       const { title, content } = extractTitleAndContent(blog.content);
@@ -121,10 +196,12 @@ function Profile() {
                               </span>
                             </div>
                             <div className="flex gap-2">
-                              <button className="p-2 text-blue-600 hover:bg-blue-50 rounded-md">
+                              <button onClick={() => handleEdit(blog)} className="p-2 text-blue-600 hover:bg-blue-50 rounded-md">
                                 Edit
                               </button>
-                              <button className="p-2 text-red-600 hover:bg-red-50 rounded-md">
+                              <button
+                              onClick={() => handleDelete(blog.id)}
+                               className="p-2 text-red-600 hover:bg-red-50 rounded-md">
                                 Delete
                               </button>
                             </div>
@@ -139,8 +216,33 @@ function Profile() {
           </div>
         </div>
       </div>
+      {/* {showModal && (
+        <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-30">
+          <div className="bg-white p-6 rounded-lg">
+            <h2 className="text-xl font-bold">{editingBlog ? "Edit Blog" : "Add New Blog"}</h2>
+            <TextEditor   initialContent={blogContent} 
+    onChange={(updatedContent) => setBlogContent(updatedContent)}  />
+            <div className="mt-4 flex justify-end">
+              <button onClick={() => setShowModal(false)} className="mr-2 px-4 py-2 bg-gray-300 rounded-md">Cancel</button>
+              <button onClick={handleSave} className="px-4 py-2 bg-blue-500 text-white rounded-md">Save</button>
+            </div>
+          </div>
+        </div>
+      )} */}
     </div>
   );
 }
 
 export default Profile;
+// function setEditingBlog(blog: Blog) {
+//   throw new Error("Function not implemented.");
+// }
+
+// function setBlogContent(content: string) {
+//   throw new Error("Function not implemented.");
+// }
+
+// function setShowModal(arg0: boolean) {
+//   throw new Error("Function not implemented.");
+// }
+

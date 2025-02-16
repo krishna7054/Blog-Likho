@@ -4,6 +4,7 @@ import { SignupType } from "krishna007-common";
 import axios from "axios";
 import { BACKEND_URL } from "../config";
 import Button from "./Button";
+import { toast } from "react-toastify";
 
 export const Auth = ({ type }: { type: "signup" | "signin" }) => {
     const [postInputs, setPostInput] = useState<SignupType>({
@@ -11,6 +12,7 @@ export const Auth = ({ type }: { type: "signup" | "signin" }) => {
         email: "",
         password: ""
     });
+    const [isLoading, setIsLoading] = useState(false);
 
     const navigate = useNavigate();
 
@@ -22,6 +24,7 @@ export const Auth = ({ type }: { type: "signup" | "signin" }) => {
     }, [navigate]);
 
     async function sendRequest() {
+        setIsLoading(true);
         try {
             const response = await axios.post(
                 `${BACKEND_URL}/api/v1/user/${type === "signup" ? "signup" : "signin"}`,
@@ -29,10 +32,13 @@ export const Auth = ({ type }: { type: "signup" | "signin" }) => {
             );
             const jwt = response.data;
             localStorage.setItem("token", JSON.stringify(jwt));
+            toast.success("Login successful!", { position:"bottom-right", autoClose: 3000 });
             navigate("/blogs");
         } catch (e) {
-            window.alert("Request failed. Please try again.");
-        }
+            toast.error("Request failed. Please try again.", { position: "bottom-right", autoClose: 3000 });
+        } finally {
+            setIsLoading(false); 
+          }
     }
 
     return (
@@ -73,7 +79,7 @@ export const Auth = ({ type }: { type: "signup" | "signin" }) => {
                                 setPostInput({ ...postInputs, password: e.target.value })
                             }
                         />
-                        <Button onClick={sendRequest} text={type === "signup" ? "Sign Up" : "Sign In"} />
+                        <Button onClick={sendRequest} text={isLoading ? (type === "signup" ? "Signing up..." : "Signing in...") : (type === "signup" ? "Sign Up" : "Sign In")} disabled={isLoading}  />
                     </div>
                 </div>
             </div>

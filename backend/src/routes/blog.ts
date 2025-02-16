@@ -60,32 +60,35 @@ blogRouter.post('/',async (c)=>{
 
 
 
-blogRouter.put('/',async (c)=>{
-    const userId = c.get('userId');
-	const prisma = new PrismaClient({
-		datasourceUrl: c.env?.DATABASE_URL	,
-	}).$extends(withAccelerate());
+	blogRouter.put('/:id',async (c)=>{
+		const userId = c.get('userId');
+		const id = c.req.param('id');
+		const prisma = new PrismaClient({
+			datasourceUrl: c.env?.DATABASE_URL	,
+		}).$extends(withAccelerate());
 
-	const body = await c.req.json();
-	const { success } = updatePostInput.safeParse(body);
-	if (!success) {
-		c.status(400);
-		return c.json({ error: "invalid input" });
-	}
-	await prisma.post.update({
-		where: {
-			id: body.id,
-			authorId: userId
-		},
-		data: {
-			
-			content: body.content
-			
+		const body = await c.req.json();
+		const { success } = updatePostInput.safeParse(body);
+		if (!success) {
+			c.status(400);
+			return c.json({ error: "invalid input" });
 		}
-	});
+		console.log("Usr",userId);
+		console.log("bl",id);
+		await prisma.post.update({
+			where: {
+				id: id,
+				authorId: userId
+			},
+			data: {
+				
+				content: body.content
+				
+			}
+		});
 
-	return c.text('updated post');
-})
+		return c.text('updated post');
+	})
 
 blogRouter.get('/bulk',async (c)=>{
     const prisma = new PrismaClient({
@@ -133,3 +136,31 @@ blogRouter.get('/:id',async (c)=>{
 	return c.json(post);
 })
   
+blogRouter.delete('/:id', async (c) => {
+    const userId = c.get('userId');
+    const id = c.req.param('id');
+    console.log("User ID:", userId);
+    console.log("Blog ID:", id);
+    const prisma = new PrismaClient({
+        datasourceUrl: c.env?.DATABASE_URL,
+    }).$extends(withAccelerate());
+
+    try {
+        const post = await prisma.post.deleteMany({
+            where: {
+                id: id,
+                authorId: userId
+            }
+        });
+
+        if (post.count === 0) {
+            c.status(404);
+            return c.json({ error: "Post not found or unauthorized" });
+        }
+
+        return c.json({ message: "Post deleted successfully" });
+    } catch (error) {
+        c.status(500);
+        return c.json({ error: "Internal server error" });
+    }
+});

@@ -1,5 +1,6 @@
 
 import { useState, useEffect } from "react";
+import { Spinner } from "./Spinner";
 
 const API_URL = "https://api.api-ninjas.com/v1/quotes";
 const API_KEY = "RxjSjqShlyxYVfOZ1TBtng==geB8wKgIklPxNPEH"; // Replace with your actual API key
@@ -44,7 +45,7 @@ export const Quote = () =>{
         CEO, Amazon
         </div>  */}
         {isLoading ? (
-          <p className="text-xl font-semibold">Loading...</p>
+          <Spinner/>
         ) : quote ? (
           <>
             <div className="text-3xl font-bold font-serif">"{quote.text}"</div>

@@ -12,7 +12,14 @@ const app = new Hono<{
 	}
 }>();
 
-app.use('/*',cors())
+app.use('/*',cors({
+  origin: 'http://localhost:5173', // Allow only the frontend origin
+  allowMethods: ['GET', 'POST', 'PUT', 'DELETE', 'PATCH', 'OPTIONS'],
+  allowHeaders: ['Authorization', 'Content-Type'],
+  credentials: true, // Allow credentials (cookies, authorization headers)
+  exposeHeaders: ['Content-Length', 'X-Kuma-Revision'],
+  maxAge: 600
+}))
 
 app.route("/api/v1/user",userRouter);
 app.route("/api/v1/blog", blogRouter);

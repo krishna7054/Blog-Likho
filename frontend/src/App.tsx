@@ -7,12 +7,17 @@ import { Blog } from './pages/Blog'
 import { Blogs } from './pages/Blogs'
 import {Publish} from './pages/Publish'
 import Profile from './pages/Profile'
+import { ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+
 
 function App() {
 
   return (
     <>
+         
       <BrowserRouter>
+      <ToastContainer />
         <Routes>
           <Route path="/" element={<Signup />} />
           <Route path="/signin" element={<Signin />} />

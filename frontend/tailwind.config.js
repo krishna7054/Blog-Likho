@@ -19,7 +19,7 @@ export default {
             transform: 'translateX(-100px) scale(1.2)',
             opacity: '0'
           }
-        }
+        },
       },
       animation: {
         'slide-in': 'slide-in 1s ease-out',

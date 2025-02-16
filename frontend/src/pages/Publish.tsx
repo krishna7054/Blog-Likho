@@ -1,5 +1,5 @@
 import { ChangeEvent, useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
 // import { Appbar } from "../components/Appbar";
 import axios from "axios";
 import { BACKEND_URL } from "../config";
@@ -7,15 +7,27 @@ import Navbar from "../components/Navbar";
 import TextEditor from "../components/TextEditor";
 
 export const Publish =()=>{
-    const [title, setTitle] = useState("");
-    const [description, setDescription] = useState("");
+    const location = useLocation();
+    const blogData = location.state?.blog || null;
+    const [title, setTitle] = useState(blogData?.title || "");
+    const [description, setDescription] = useState(blogData?.content || "");
     const navigate = useNavigate();
+
 
     const handlePublish = async () => {
         try {
             const storedToken = localStorage.getItem("token");
             const token = storedToken ? JSON.parse(storedToken).jwt : null;
 
+            if (blogData) {
+                // Update existing blog
+                await axios.put(`${BACKEND_URL}/api/v1/blog/${blogData.id}`, {
+                    title,
+                    content: description
+                }, {
+                    headers: { Authorization: token }
+                });
+            }else{
             const response = await axios.post(`${BACKEND_URL}/api/v1/blog`, {
                 title,
                 content: description
@@ -24,8 +36,11 @@ export const Publish =()=>{
                     Authorization: token
                 }
             });
-
             navigate(`/blog/${response.data.id}`);
+            return;
+        }
+
+        navigate(`/blog/${blogData?.id || ""}`);
         } catch (error) {
             console.error("Error publishing post:", error);
         }
@@ -40,10 +55,7 @@ export const Publish =()=>{
                     setTitle(e.target.value)
                 }} type="text" className="w-full bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block p-2.5" placeholder="Title" /> */}
 
-<TextEditor onChange={(data) => { 
-    // @ts-ignore
-    setDescription(data);
-}} />
+<TextEditor onChange={setDescription} initialContent={description} />
 
                 {/* <button onClick={async () => {
                             const storedToken = localStorage.getItem("token");

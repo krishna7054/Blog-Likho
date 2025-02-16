@@ -33,7 +33,8 @@ export const Blogs =()=>{
             {/* <Appbar />  */}
             <Navbar/>
             <div className="flex justify-center">
-            <div>{[...Array(5)].map((_, i) => <BlogSkeleton key={i} />)}</div>
+            <div>
+            {loading && [...Array(5)].map((_, i) => <BlogSkeleton key={i} />)}</div>
         </div>
         </div>
     }
