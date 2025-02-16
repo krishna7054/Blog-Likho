@@ -1,11 +1,7 @@
 import { Blog } from "../hooks"
-// import { Appbar } from "./Appbar"
 import { Avatar } from "./BlogCard"
 import DOMPurify from "dompurify";
-
 import Navbar from "./Navbar"
-// import { useEffect } from "react";
-// import {  useNavigate } from "react-router-dom"
 
 export const FullBlog=({blog}:{blog:Blog})=>{
     const formatDate = (dateString: string | number | Date) => {
@@ -33,26 +29,14 @@ export const FullBlog=({blog}:{blog:Blog})=>{
       };
     
       const { title, content: filteredContent } = extractTitleAndContent(blog.content);
-    // const navigate= useNavigate();
-    // useEffect(() => {
-    //     const token = localStorage.getItem("token");
-    //     if (!token) {
-    //       navigate("/login");
-    //     }
-    //   }, []);
+   
     return <div>
-    {/* <Appbar /> */}
+    
     <Navbar/>
     <div className="flex justify-center ">
         <div className="grid grid-cols-12 px-10 w-full pt-200 max-w-screen-xl pt-12 mt-10">
             <div className="col-span-8">
-                {/* <div className="text-5xl font-abold">
-                    {blog.title}
-                </div>
-                <div
-      className="pt-4"
-      dangerouslySetInnerHTML={{ __html: blog.content }}
-    /> */}
+           
 
      {/* Title extracted from first <h1> */}
      <div className="text-5xl font-bold pt-2">
@@ -69,9 +53,7 @@ export const FullBlog=({blog}:{blog:Blog})=>{
                 <div className="text-slate-500 pt-2">
                    <span className="text-lg">Post on</span>   {formatDate(blog.publishedDate)}
                 </div>
-                {/* <div className="pt-4">
-                    {blog.content}
-                </div> */}
+               
             </div>
             <div className="ml-20 mt-10 col-span-4 cursor-pointer transition-all duration-500 hover:translate-y-2 w-full h-fit bg-neutral-50 rounded-lg shadow-xl flex  items-center justify-evenly gap-4 px-4">
                 

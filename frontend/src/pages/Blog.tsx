@@ -1,4 +1,3 @@
-// import { Appbar } from "../components/Appbar";
 import { FullBlog } from "../components/FullBlog";
 import Navbar from "../components/Navbar";
 import { Spinner } from "../components/Spinner";
@@ -11,7 +10,7 @@ export const Blog =()=>{
     });
     if(loading){
         return <div>
-            {/* <Appbar/> */}
+            
             <Navbar/>
         <div className="h-screen flex flex-col justify-center">
             <div className="flex justify-center">
@@ -22,7 +21,7 @@ export const Blog =()=>{
     }
 
     if (!blog) {
-        return <div>No blog found</div>;
+        return <div className="flex justify-center font-semibold text-xl">No blog found</div>;
     }
    
     return <div>

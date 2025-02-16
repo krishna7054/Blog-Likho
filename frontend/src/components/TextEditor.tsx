@@ -1,8 +1,8 @@
-import { useState, useEffect, useRef, useMemo, ChangeEvent } from 'react';
+import { useState, useEffect, useRef, useMemo } from 'react';
 import { CKEditor, useCKEditorCloud } from '@ckeditor/ckeditor5-react';
 import { GoogleGenerativeAI } from "@google/generative-ai";
-import axios from 'axios';
 import '../App.css';
+import { toast } from 'react-toastify';
 
 const LICENSE_KEY =
 	'eyJhbGciOiJFUzI1NiJ9.eyJleHAiOjE3NDAzNTUxOTksImp0aSI6IjJhZjMxZDM2LTM5OGYtNGNkYy1hOGI3LTc5OWI4MGYxNzY0OCIsInVzYWdlRW5kcG9pbnQiOiJodHRwczovL3Byb3h5LWV2ZW50LmNrZWRpdG9yLmNvbSIsImRpc3RyaWJ1dGlvbkNoYW5uZWwiOlsiY2xvdWQiLCJkcnVwYWwiLCJzaCJdLCJ3aGl0ZUxhYmVsIjp0cnVlLCJsaWNlbnNlVHlwZSI6InRyaWFsIiwiZmVhdHVyZXMiOlsiKiJdLCJ2YyI6Ijg5ZmQ0ODhiIn0.eelj7hqXJbmFfQtWHoP46WwUd2lctOEizNQ7YdgZt_4s4ua7NgKwTb68qah9jwCr-RZKlP1JFHmlNkLzEZpOSA';
@@ -25,9 +25,9 @@ export default function TextEditor({
     const fun=async(text:string)=>{
         const genAI = new GoogleGenerativeAI(GEMINI_API_KEY);
         const model = genAI.getGenerativeModel({ model: "gemini-1.5-flash" });
-        const prompt = `Enhance the following user input while keeping it concise and impactful. Provide only plain text, no additional comments. ${text}`;
+        const prompt = `Explain in short the meaning of the selected text: "${text}". Keep it concise and clear.**Suggest alternative words/phrases to make the blog more impactful:**`;
         const result = await model.generateContent(prompt);
-        console.log(result.response.text());
+		toast.info("Generate enhanceed sentence", { position: "bottom-right", autoClose: 3000 });
         setSuggestions(result.response.text())
         return result.response.text()
     }
@@ -39,22 +39,7 @@ export default function TextEditor({
 	}, []);
 
 
-    // const fetchContentSuggestion = async (text: string) => {
-    //     try {
-    //         console.log("text",text);
-            
-    //         const response = await axios.post(
-    //             `https://generativelanguage.googleapis.com/v1/models/gemini-pro:generateText?key=${GEMINI_API_KEY}`,
-    //             { prompt: `Describe in detail: "${text}"` }
-    //         );
-    //         console.log("respo",response.data?.candidates?.[0]?.output);
-            
-    //         setSuggestions(response.data?.candidates?.[0]?.output || "No suggestions available.");
-    //     } catch (error) {
-    //         console.error("Error fetching suggestions:", error);
-    //         setSuggestions("Failed to fetch suggestions.");
-    //     }
-    // };
+    
 
     const handleSelection = () => {
         const selection = window.getSelection()?.toString();
@@ -236,11 +221,19 @@ export default function TextEditor({
 						)}
 					</div>
 				</div>
-                {selectedText && (
-                    /* From Uiverse.io by Javierrocadev */ 
+                
 <button
   className="overflow-hidden relative  p-2 h-12 mt-4 px-4 py-2  bg-lime-700 text-white border-none rounded-md text-xl font-bold cursor-pointer z-10 group"
-  onClick={() => fun(selectedText)}
+  onClick={() => {
+    if (selectedText) {
+      fun(selectedText);
+    } else {
+      toast.warning("Please select some text first!", {
+        position: "bottom-right",
+        autoClose: 3000,
+      });
+    }
+  }}
 >
 Generate with
   <span
@@ -257,13 +250,8 @@ Generate with
     >AI</span>
 </button>
 
-                    // <button 
-                    //     className="mt-4 px-4 py-2 bg-blue-500 text-white rounded-md" 
-                    //     onClick={() => fun(selectedText)}
-                    // >
-                    //     Generate with AI
-                    // </button>
-                )}
+
+        
                 {suggestions && (
                     <div className="p-4 mt-4 border border-gray-300 rounded-md">
                         <h3 className="font-bold text-lg">AI Suggestions:</h3>

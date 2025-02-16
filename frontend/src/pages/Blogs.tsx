@@ -1,6 +1,4 @@
-
 import { BlogCard } from "../components/BlogCard"
-// import { Appbar } from "../components/Appbar";
 import { useBlogs } from "../hooks";
 import { BlogSkeleton } from "../components/BlogSkeleton";
 import { useEffect } from "react";
@@ -30,7 +28,6 @@ export const Blogs =()=>{
     
     if(loading){
         return <div>
-            {/* <Appbar />  */}
             <Navbar/>
             <div className="flex justify-center">
             <div>
@@ -39,22 +36,12 @@ export const Blogs =()=>{
         </div>
     }
     return <div>
-        {/* <Appbar/> */}
+       
         <Navbar/>
-        {/* <Logo/> */}
         
     <div className=" flex justify-center " >
         <div className="mt-10 pt-10">
-    {/* <div >
-        {blogs.map(blog=> <BlogCard  
-        id={blog.id}
-        authorName ={blog.author.name || "Anonymous"}
-       
-        content={blog.content}
-        publishedDate={blog.publishedDate}
-        />)}
-      
-    </div> */}
+  
       {filteredBlogs.length > 0 ? (
             filteredBlogs.map((blog) => (
               <BlogCard

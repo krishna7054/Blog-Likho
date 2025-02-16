@@ -1,15 +1,14 @@
 
 import  { useEffect, useState } from 'react';
-import {  CiSearch, CiUser, CiLogout } from 'react-icons/ci';
-// import {FaBookOpen} from 'react-icons/fa';
+import {  CiSearch, CiLogout } from 'react-icons/ci';
 import {MdOutlineCancel} from 'react-icons/md';
 import { Link, useLocation, useNavigate, useSearchParams } from "react-router-dom"
 import Logo from './Logo';
-// import { useUsers } from '../hooks';
 import { jwtDecode } from 'jwt-decode';
 import { BACKEND_URL } from '../config';
 import axios from 'axios';
 import { Avatar } from './BlogCard';
+import { toast } from 'react-toastify';
 
 const Navbar = ({ onPublish }: { onPublish?: () => void }) => {
   const [isSearchOpen, setIsSearchOpen] = useState(false);
@@ -24,7 +23,6 @@ const Navbar = ({ onPublish }: { onPublish?: () => void }) => {
 
  useEffect(() => {
   const token = localStorage.getItem("token");
-  // console.log("t",token)
   if (token) {
     const decodedToken: any = jwtDecode(token);
     const userId = decodedToken.id;
@@ -35,13 +33,11 @@ const Navbar = ({ onPublish }: { onPublish?: () => void }) => {
       },
     })
     .then((response) => {
-      console.log("res",response.data);
-      
       setUsers(response.data); // Store as an array
       // setLoading(false);
     })
     } catch (error) {
-      console.error("Invalid token");
+      toast.error("Invalid token", { position: "bottom-right", autoClose: 3000 });
     }
   }
 }, []);
@@ -53,7 +49,7 @@ const logout = () => {
   removeUserToken();
   navigate('/signin')
   
-  console.log('User logged out');
+  toast.success("Logged out successfully", { position: "bottom-right", autoClose: 300});
 };
 
 const handleSearch = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -74,45 +70,11 @@ const handleSearch = (e: React.ChangeEvent<HTMLInputElement>) => {
             <span className="ml-2 text-xl font-bold text-gray-900 italic">Blog <span className='text-red-500'>लिखो</span> </span>
           </Link>
           </div>
-          {/* Navigation Links - Hidden on mobile */}
-          {/* <div className="hidden md:flex items-center space-x-8">
-            <a href="/" className="text-gray-700 hover:text-indigo-600 transition-colors">
-              Home
-            </a>
-            <a href="/articles" className="text-gray-700 hover:text-indigo-600 transition-colors">
-              Articles
-            </a>
-            <a href="/categories" className="text-gray-700 hover:text-indigo-600 transition-colors">
-              Categories
-            </a>
-            <a href="/about" className="text-gray-700 hover:text-indigo-600 transition-colors">
-              About
-            </a>
-          </div> */}
+      
 
           {/* Right Side Icons and Search */}
           <div className="flex items-center space-x-4">
-          {/* <Link to={`/publish`}>  
-<button
-  title="Add New"
-  className="group cursor-pointer outline-none hover:rotate-90 duration-300"
->
-  <svg
-    xmlns="http://www.w3.org/2000/svg"
-    width="32px"
-    height="32px"
-    viewBox="0 0 24 24"
-    className="stroke-slate-400 fill-none group-hover:fill-slate-800 group-active:stroke-slate-200 group-active:fill-slate-600 group-active:duration-0 duration-300"
-  >
-    <path
-      d="M12 22C17.5 22 22 17.5 22 12C22 6.5 17.5 2 12 2C6.5 2 2 6.5 2 12C2 17.5 6.5 22 12 22Z"
-      stroke-width="1.5"
-    ></path>
-    <path d="M8 12H16" stroke-width="1.5"></path>
-    <path d="M12 16V8" stroke-width="1.5"></path>
-  </svg>
-</button>
-</Link>  */}
+   
 
 
 {location.pathname === "/publish" ? ( // Check if on the /publish page
@@ -227,12 +189,7 @@ onClick={onPublish}
                     Your Profile
                   </a>
                   
-                  {/* <a 
-                    href="#" 
-                    className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
-                  >
-                    Settings
-                  </a> */}
+                 
                   <button 
                     onClick={logout}
                     className="w-full text-left px-4 py-2 text-sm text-red-600 hover:bg-gray-100 flex items-center cursor-pointer"
@@ -246,36 +203,11 @@ onClick={onPublish}
 
             
 
-            {/* Mobile Menu Button */}
-            {/* <button 
-              onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
-              className="md:hidden p-2 text-gray-600 hover:text-indigo-600 transition-colors"
-            >
-              <CiMenuBurger className="h-5 w-5" />
-            </button> */}
           </div>
         </div>
       </div>
 
-      {/* Mobile Navigation Menu */}
-      {/* {isMobileMenuOpen && (
-        <div className="md:hidden">
-          <div className="px-2 pt-2 pb-3 space-y-1 sm:px-3">
-            <a href="/" className="block px-3 py-2 text-gray-700 hover:text-indigo-600 transition-colors">
-              Home
-            </a>
-            <a href="/articles" className="block px-3 py-2 text-gray-700 hover:text-indigo-600 transition-colors">
-              Articles
-            </a>
-            <a href="/categories" className="block px-3 py-2 text-gray-700 hover:text-indigo-600 transition-colors">
-              Categories
-            </a>
-            <a href="/about" className="block px-3 py-2 text-gray-700 hover:text-indigo-600 transition-colors">
-              About
-            </a>
-          </div>
-        </div>
-      )} */}
+    
 
       {/* Click Outside Handler */}
       {(isSearchOpen || isProfileOpen) && (

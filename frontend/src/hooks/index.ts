@@ -30,9 +30,6 @@ export const useBlog = ({id}: {id:string})=>{
             setLoading(false);
         })
         .catch(error => {
-            console.log("Token:", localStorage.getItem("token"));
-
-            console.error("Error fetching blogs:", error);
             setError(error);
             setLoading(false);
         });
@@ -52,7 +49,6 @@ export const useBlogs=()=>{
     useEffect(() => {
         const storedToken = localStorage.getItem("token");
         const token = storedToken ? JSON.parse(storedToken).jwt : null;
-        console.log("Token:", token);
         axios.get(`${BACKEND_URL}/api/v1/blog/bulk`, {
             headers: {
                 Authorization: token
@@ -63,9 +59,6 @@ export const useBlogs=()=>{
             setLoading(false);
         })
         .catch(error => {
-            console.log("Token:", localStorage.getItem("token"));
-
-            console.error("Error fetching blogs:", error);
             setError(error);
             setLoading(false);
         });
@@ -104,7 +97,7 @@ export interface User {
           setLoading(false);
         })
         .catch((err) => {
-          console.error("Error fetching user:", err);
+          
           setError("Failed to load user data");
           setLoading(false);
         });

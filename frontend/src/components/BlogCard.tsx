@@ -1,9 +1,9 @@
 import { Link } from "react-router-dom";
-import DOMPurify from "dompurify";
 import { useEffect, useState } from "react";
 import { GoogleGenerativeAI } from "@google/generative-ai";
+import { toast } from "react-toastify";
 
-const GEMINI_API_KEY = "AIzaSyBabhB-oEErVs9H_O0ulKt3tFU36Bs5im0"; // 🔥 Replace with your API key
+const GEMINI_API_KEY = "AIzaSyBabhB-oEErVs9H_O0ulKt3tFU36Bs5im0"; 
 
 interface BlogCardProps {
   authorName: string;
@@ -83,13 +83,7 @@ export const BlogCard = ({ id, authorName, content, publishedDate }: BlogCardPro
         {/* AI-Generated Summary */}
         <div className="mt-2 text-gray-700">{summary}..</div>
 
-        {/* Remaining content after removing first <h1> */}
-        {/* <div
-          className="mt-2 text-gray-700"
-          dangerouslySetInnerHTML={{
-            __html: DOMPurify.sanitize(filteredContent),
-          }}
-        /> */}
+       
 
         <div className="text-slate-500 text-sm font-thin pt-4">
           {`${Math.ceil(filteredContent.length / 100)} minute(s) read`}

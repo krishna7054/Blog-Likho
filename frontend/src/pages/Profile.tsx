@@ -7,19 +7,15 @@ import { Avatar } from "../components/BlogCard";
 import DOMPurify from "dompurify";
 import Navbar from "../components/Navbar";
 import { Blog, useBlogs } from "../hooks";
-import TextEditor from "../components/TextEditor";
 import { useNavigate } from "react-router-dom";
-import { div } from "motion/react-client";
 import { Spinner } from "../components/Spinner";
+import { toast } from "react-toastify";
 
 function Profile() {
   const [isEditing, setIsEditing] = useState(false);
   const [Users, setUsers] = useState<{ name?: string; email?: string; id?: string } | null>(null);
   const [userBlogs, setUserBlogs] = useState<Blog[]>([]);
-  const [editingBlog, setEditingBlog] = useState<Blog | null>(null);
   const { loading, blogs } = useBlogs();
-  const [blogContent, setBlogContent] = useState("");
-  const [showModal, setShowModal] = useState(false);
   const navigate = useNavigate();
 
 
@@ -88,10 +84,9 @@ function Profile() {
     
         // Remove the deleted blog from the UI
         setUserBlogs(userBlogs.filter((blog) => blog.id !== blogId));
-    
-        console.log("Post deleted successfully");
+        toast.success("Post deleted successfully", { position: "bottom-right", autoClose: 3000 });
       } catch (error) {
-        console.error("Failed to delete post:", error);
+        toast.error("Failed to delete post", { position: "bottom-right", autoClose: 3000 });
       }
     };
 
@@ -99,37 +94,6 @@ function Profile() {
       navigate("/publish", { state: { blog } });
     };
 
-    // const handleSave = async () => {
-    //   const storedToken = localStorage.getItem("token");
-    //   const token = storedToken ? JSON.parse(storedToken).jwt : null;
-    //   if (!token) {
-    //     console.error("User is not authenticated");
-    //     return;
-    //   }
-  
-    //   try {
-    //     if (editingBlog) {
-    //       console.log(`${BACKEND_URL}/api/v1/blog/${editingBlog?.id}`);
-
-    //       await axios.put(`${BACKEND_URL}/api/v1/blog/${editingBlog.id}`, 
-    //         { content: blogContent },
-    //         { headers: { Authorization: token } }
-    //       );
-    //     }
-
-    //     setUserBlogs((prevBlogs) =>
-    //       prevBlogs.map((blog) =>
-    //         // @ts-ignore
-    //         blog.id === editingBlog.id ? { ...blog, content: blogContent } : blog
-    //       )
-    //     );
-  
-    //     setShowModal(false);
-    //     setEditingBlog(null);
-    //   } catch (error) {
-    //     console.error("Failed to save post:", error);
-    //   }
-    // };
     
 
   return (
@@ -216,33 +180,11 @@ function Profile() {
           </div>
         </div>
       </div>
-      {/* {showModal && (
-        <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-30">
-          <div className="bg-white p-6 rounded-lg">
-            <h2 className="text-xl font-bold">{editingBlog ? "Edit Blog" : "Add New Blog"}</h2>
-            <TextEditor   initialContent={blogContent} 
-    onChange={(updatedContent) => setBlogContent(updatedContent)}  />
-            <div className="mt-4 flex justify-end">
-              <button onClick={() => setShowModal(false)} className="mr-2 px-4 py-2 bg-gray-300 rounded-md">Cancel</button>
-              <button onClick={handleSave} className="px-4 py-2 bg-blue-500 text-white rounded-md">Save</button>
-            </div>
-          </div>
-        </div>
-      )} */}
+  
     </div>
   );
 }
 
 export default Profile;
-// function setEditingBlog(blog: Blog) {
-//   throw new Error("Function not implemented.");
-// }
 
-// function setBlogContent(content: string) {
-//   throw new Error("Function not implemented.");
-// }
-
-// function setShowModal(arg0: boolean) {
-//   throw new Error("Function not implemented.");
-// }
 
