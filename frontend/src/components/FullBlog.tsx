@@ -2,8 +2,18 @@ import { Blog } from "../hooks"
 import { Avatar } from "./BlogCard"
 import DOMPurify from "dompurify";
 import Navbar from "./Navbar"
+import { useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 
 export const FullBlog=({blog}:{blog:Blog})=>{
+
+  const navigate = useNavigate();
+  useEffect(() => {
+    const token = localStorage.getItem("token");
+    if (!token) {
+      navigate("/signin");
+    }
+  }, []);
     const formatDate = (dateString: string | number | Date) => {
         return new Date(dateString).toLocaleDateString("en-GB"); // dd/mm/yyyy
       };

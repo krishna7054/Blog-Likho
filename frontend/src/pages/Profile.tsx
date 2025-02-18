@@ -18,6 +18,12 @@ function Profile() {
   const { blogs } = useBlogs();
   const navigate = useNavigate();
 
+  useEffect(() => {
+    const token = localStorage.getItem("token");
+    if (!token) {
+      navigate("/signin");
+    }
+  }, []);
 
 
   const formatDate = (dateString: string | number | Date) => {

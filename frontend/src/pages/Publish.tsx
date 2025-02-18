@@ -1,4 +1,4 @@
-import {  useState } from "react";
+import {  useEffect, useState } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
 import axios from "axios";
 import { BACKEND_URL } from "../config";
@@ -12,6 +12,13 @@ export const Publish =()=>{
     const [title] = useState(blogData?.title || "");
     const [description, setDescription] = useState(blogData?.content || "");
     const navigate = useNavigate();
+
+     useEffect(() => {
+            const token = localStorage.getItem("token");
+            if (!token) {
+              navigate("/signin");
+            }
+          }, []);
 
 
     const handlePublish = async () => {
