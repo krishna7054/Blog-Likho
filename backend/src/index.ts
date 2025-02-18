@@ -13,7 +13,7 @@ const app = new Hono<{
 }>();
 
 app.use('/*',cors({
-  origin: 'http://localhost:5173', // Allow only the frontend origin
+  origin: 'https://blog-likho.vercel.app', // Allow only the frontend origin
   allowMethods: ['GET', 'POST', 'PUT', 'DELETE', 'PATCH', 'OPTIONS'],
   allowHeaders: ['Authorization', 'Content-Type'],
   credentials: true, // Allow credentials (cookies, authorization headers)
