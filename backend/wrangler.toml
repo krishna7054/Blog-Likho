@@ -3,6 +3,8 @@ compatibility_date = "2023-12-01"
 main = "src/index.ts"
 
  [vars]
+DATABASE_URL="prisma://accelerate.prisma-data.net/?api_key=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJhcGlfa2V5IjoiNjE2ZGE1YzAtYmU1NS00MjUwLTgzNjYtNDFkYjdkMjgzYzEwIiwidGVuYW50X2lkIjoiMjY0OTMzYjI4OTYwOTM4ZDE1OTI3ZmVhOWU4MzVlNzQ4ZGYxMDIwYmViNzQ0MjkyNDQ3N2U4M2MxMWRlZTBlZiIsImludGVybmFsX3NlY3JldCI6IjU3NzQyZWJiLTY3YTEtNDViNC04NjYzLTA1ZjE2NzliNTc0YSJ9.x70jah-Zpvy_R_dPZcRQT8s1-8eCUAVYPDrsneXkqMM"
+JWT_SECRET="mffgfgg"
 
 # wrangler.toml (wrangler v3.88.0^)
 [observability.logs]
