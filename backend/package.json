@@ -2,17 +2,18 @@
   "name": "backend",
   "scripts": {
     "dev": "wrangler dev src/index.ts",
-    "deploy": "wrangler deploy --minify"
+    "deploy": "wrangler deploy src/index.ts --minify"
   },
   "dependencies": {
     "@prisma/client": "^5.16.0",
     "@prisma/extension-accelerate": "^1.1.0",
     "hono": "^4.4.8",
-    "krishna007-common": "^1.0.0",
-    "prisma": "^5.15.1"
+    "krishna007-common": "^1.0.0"
   },
   "devDependencies": {
     "@cloudflare/workers-types": "^4.20240529.0",
-    "wrangler": "^3.57.2"
+    "esbuild": "^0.25.8",
+    "prisma": "^5.16.0",
+    "wrangler": "^4.27.0"
   }
 }

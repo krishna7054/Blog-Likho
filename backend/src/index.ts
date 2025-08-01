@@ -21,8 +21,14 @@ app.use('/*',cors({
   maxAge: 600
 }))
 
+
 app.route("/api/v1/user",userRouter);
 app.route("/api/v1/blog", blogRouter);
+
+app.get('/', (c) => {
+  console.log('Root route hit!')
+  return c.text('Hello from root!')
+})
 
 
 
