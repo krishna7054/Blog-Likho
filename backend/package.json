@@ -2,7 +2,7 @@
   "name": "backend",
   "scripts": {
     "dev": "wrangler dev src/index.ts",
-    "deploy": "wrangler deploy src/index.ts --minify"
+    "deploy": "wrangler deploy --minify"
   },
   "dependencies": {
     "@prisma/client": "^5.16.0",
