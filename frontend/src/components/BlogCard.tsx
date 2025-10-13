@@ -2,7 +2,7 @@ import { Link } from "react-router-dom";
 import { useEffect, useState } from "react";
 import { GoogleGenerativeAI } from "@google/generative-ai";
 
-const GEMINI_API_KEY = "AIzaSyBabhB-oEErVs9H_O0ulKt3tFU36Bs5im0"; 
+const GEMINI_API_KEY = "AIzaSyATg1qNGcjAxAlzS9teBy9_HlnMVZfF5n0"; 
 
 interface BlogCardProps {
   authorName: string;
@@ -39,7 +39,7 @@ export const BlogCard = ({ id, authorName, content, publishedDate }: BlogCardPro
     const fetchSummary = async () => {
       try {
         const gemini = new GoogleGenerativeAI(GEMINI_API_KEY);
-        const model = gemini.getGenerativeModel({ model: "gemini-1.5-flash-latest" });
+        const model = gemini.getGenerativeModel({ model: "gemini-2.5-flash" });
         const response = await model.generateContent(`Summarize the following blog post in two concise sentences:\n\n${filteredContent}`);
         const response2 = await model.generateContent(`Provide a single, relevant tag that best represents the main topic of the following blog post:\n\n${filteredContent}\n\nOnly return the tag without any additional text.`);
         setSummary(response.response.text());
