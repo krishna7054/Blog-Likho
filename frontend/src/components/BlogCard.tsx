@@ -2,8 +2,8 @@ import { Link } from "react-router-dom";
 import { useEffect, useState } from "react";
 import { GoogleGenerativeAI } from "@google/generative-ai";
 
-// const GEMINI_API_KEY = "";
-const GEMINI_API_KEY =process.env.GEMINI_API_KEY;
+const GEMINI_API_KEY = "AIzaSyATg1qNGcjAxAlzS9teBy9_HlnMVZfF5n0";
+// const GEMINI_API_KEY =process.env.GEMINI_API_KEY;
 
 interface BlogCardProps {
   authorName: string;
