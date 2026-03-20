@@ -39,7 +39,7 @@ export const BlogCard = ({ id, authorName, content, publishedDate }: BlogCardPro
     const fetchSummary = async () => {
       try {
         const gemini = new GoogleGenerativeAI(GEMINI_API_KEY);
-        const model = gemini.getGenerativeModel({ model: "gemini-2.5-flash" });
+        const model = gemini.getGenerativeModel({ model: "gemini-3-flash-preview" });
         const response = await model.generateContent(`Summarize the following blog post in two concise sentences:\n\n${filteredContent}`);
         const response2 = await model.generateContent(`Provide a single, relevant tag that best represents the main topic of the following blog post:\n\n${filteredContent}\n\nOnly return the tag without any additional text.`);
         setSummary(response.response.text());
